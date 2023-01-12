@@ -1,5 +1,6 @@
+import time
 from time import ctime
-
+from deep_translator import GoogleTranslator
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit
@@ -27,6 +28,8 @@ def take_command(ask =False):
             command = listener.recognize_google(voice)
             command = command.lower()
 
+
+
             # if 'assistant' in command:
             #     command =command.replace('assistant' , '')
             #     print(command)
@@ -42,11 +45,11 @@ def take_command(ask =False):
 
 
 
-def run_assistant():
-    command = take_command()
-    print(command)
+def run_assistant(command):
+
     if 'music' in command:
-        song = command.replace('music', '')
+        music= take_command('what kin of music do you like?')
+        song = command.replace('music', music)
         talk(song)
         pywhatkit.playonyt(song)
     if 'send a message' in command:
@@ -68,15 +71,32 @@ def run_assistant():
 
         url = 'https://google.com/search?q='+ google
         webbrowser.get().open(url)
-        print('here is search'+ google)
+        print('here is search' + google)
+
+    if 'wikipedia search' in command:
+        wiki = take_command('please select something?')
+
+        url = 'https://en.wikipedia.org/wiki/' + wiki
+        webbrowser.get().open(url)
+        print('here is search' + wiki)
+
+    if 'translation' in command:
+        translet = take_command('please say something')
+        translated = GoogleTranslator(source='auto', target='bn').translate(translet)
+        print(translated)
 
     if 'find map' in command:
 
         location = take_command('what is the location?')
         url = 'https://google.nl/maps/place/' + location + '/&amp;'
         webbrowser.get().open(url)
-        print('here is the location' + location)
+        print('here is the location' +' '+ location)
+    if 'exit' in command:
+        exit()
 
+time.sleep(1)
+talk('listening')
+while 1:
+    command =take_command()
+    run_assistant(command)
 
-
-run_assistant()
